@@ -16,13 +16,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { AutorComponent } from './components/autor.component/autor.component';
+import { CategoriaComponent } from './components/categoria.component/categoria.component';
 
 
 
 @NgModule({
   declarations: [
     App,
-    ClienteComponent
+    ClienteComponent,
+    AutorComponent,
+    CategoriaComponent
   ],
   imports: [
     BrowserModule,

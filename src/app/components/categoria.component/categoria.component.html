@@ -1,0 +1,84 @@
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">
+    {{ idEditar ? 'Editar Categoría' : 'Registrar Categoría' }}
+  </h2>
+
+  <form (ngSubmit)="guardarCategoria()" class="border p-4 rounded shadow-sm">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Nombre de la categoría"
+          [(ngModel)]="categoria.categoria"
+          name="categoria"
+          required
+        />
+      </div>
+      <div class="col-md-6">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Descripción"
+          [(ngModel)]="categoria.descripcion"
+          name="descripcion"
+        />
+      </div>
+    </div>
+    <div class="mt-4 d-flex gap-2">
+      <button type="submit" class="btn btn-success">
+        {{ idEditar ? 'Actualizar' : 'Guardar' }}
+      </button>
+      <button
+        type="button"
+        *ngIf="idEditar"
+        (click)="limpiarFormulario()"
+        class="btn btn-secondary"
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
+
+  <div class="mt-4">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Buscar categoría..."
+      [(ngModel)]="searchText"
+    />
+  </div>
+
+  <div class="table-responsive mt-3">
+    <table class="table table-bordered table-striped align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Categoría</th>
+          <th>Descripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of categoriasFiltradas">
+          <td>{{ c.idCategoria }}</td>
+          <td>{{ c.categoria }}</td>
+          <td>{{ c.descripcion }}</td>
+          <td>
+            <div class="btn-group btn-group-sm">
+              <button class="btn btn-warning" (click)="editarCategoria(c)">
+                Editar
+              </button>
+              <button
+                class="btn btn-danger"
+                (click)="eliminarCategoria(c.idCategoria!)"
+              >
+                Eliminar
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">{{ editar ? 'Editar Autor' : 'Registrar Autor' }}</h2>
+
+  <form #formAutor="ngForm" (ngSubmit)="guardar(formAutor)" #formularioAutor class="border p-4 rounded shadow-sm">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <input type="text" name="nombre" [(ngModel)]="autor.nombre" placeholder="Nombre" class="form-control" required>
+      </div>
+      <div class="col-md-4">
+        <input type="text" name="apellido" [(ngModel)]="autor.apellido" placeholder="Apellido" class="form-control" required>
+      </div>
+      <div class="col-md-4">
+        <input type="text" name="pais" [(ngModel)]="autor.pais" placeholder="País" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <input type="text" name="direccion" [(ngModel)]="autor.direccion" placeholder="Dirección" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <input type="text" name="telefono" [(ngModel)]="autor.telefono" placeholder="Teléfono" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <input type="email" name="correo" [(ngModel)]="autor.correo" placeholder="Correo electrónico" class="form-control">
+      </div>
+    </div>
+
+    <div class="mt-4 d-flex gap-2">
+      <button type="submit" class="btn btn-success">{{ editar ? 'Actualizar' : 'Guardar' }}</button>
+      <button type="button" *ngIf="editar" class="btn btn-secondary" (click)="editarAutorCancelar(formAutor)">Cancelar</button>
+    </div>
+  </form>
+
+  <div class="mt-4">
+    <input type="text" class="form-control" placeholder="Buscar autor..." (input)="buscarAutor($event)">
+  </div>
+
+  <div class="table-responsive mt-3" *ngIf="dataSource">
+    <table class="table table-striped table-bordered align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>País</th>
+          <th>Dirección</th>
+          <th>Teléfono</th>
+          <th>Correo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let autor of dataSource?.filteredData">
+          <td>{{ autor.idAutor }}</td>
+          <td>{{ autor.nombre }}</td>
+          <td>{{ autor.apellido }}</td>
+          <td>{{ autor.pais }}</td>
+          <td>{{ autor.direccion }}</td>
+          <td>{{ autor.telefono }}</td>
+          <td>{{ autor.correo }}</td>
+          <td>
+            <div class="btn-group btn-group-sm">
+              <button class="btn btn-warning" (click)="editarAutor(autor)">Editar</button>
+              <button class="btn btn-danger" (click)="this.autor = autor; delete()">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons></mat-paginator>
+  </div>
+</div>
