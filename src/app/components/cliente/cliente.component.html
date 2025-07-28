@@ -1,0 +1,98 @@
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">{{ editar ? 'Editar Cliente' : 'Registrar Cliente' }}</h2>
+
+  <form #formCliente="ngForm" (ngSubmit)="guardar(formCliente)" #formularioCliente class="border p-4 rounded shadow-sm">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <input type="text" name="cedula" [(ngModel)]="cliente.cedula" placeholder="Cédula" class="form-control" required>
+      </div>
+      <div class="col-md-4">
+        <input type="text" name="nombre" [(ngModel)]="cliente.nombre" placeholder="Nombre" class="form-control" required>
+      </div>
+      <div class="col-md-4">
+        <input type="text" name="apellido" [(ngModel)]="cliente.apellido" placeholder="Apellido" class="form-control" required>
+      </div>
+      <div class="col-md-6">
+        <input type="text" name="direccion" [(ngModel)]="cliente.direccion" placeholder="Dirección" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <input type="text" name="telefono" [(ngModel)]="cliente.telefono" placeholder="Teléfono" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <input type="email" name="correo" [(ngModel)]="cliente.correo" placeholder="Correo electrónico" class="form-control">
+      </div>
+    </div>
+
+    <div class="mt-4 d-flex gap-2">
+      <button type="submit" class="btn btn-success">{{ editar ? 'Actualizar' : 'Guardar' }}</button>
+      <button type="button" *ngIf="editar" class="btn btn-secondary" (click)="editarClienteCancelar(formCliente)">Cancelar</button>
+    </div>
+  </form>
+
+  <div class="mt-4">
+    <input type="text" class="form-control" placeholder="Buscar cliente..." (input)="buscarCliente($event)">
+  </div>
+
+  <div class="table-responsive mt-3" *ngIf="dataSource">
+    <table mat-table [dataSource]="dataSource" class="table table-striped table-bordered align-middle">
+
+      <!-- ID -->
+      <ng-container matColumnDef="idCliente">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let cliente">{{ cliente.idCliente }}</td>
+      </ng-container>
+
+      <!-- Cédula -->
+      <ng-container matColumnDef="cedula">
+        <th mat-header-cell *matHeaderCellDef>Cédula</th>
+        <td mat-cell *matCellDef="let cliente">{{ cliente.cedula }}</td>
+      </ng-container>
+
+      <!-- Nombre -->
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let cliente">{{ cliente.nombre }}</td>
+      </ng-container>
+
+      <!-- Apellido -->
+      <ng-container matColumnDef="apellido">
+        <th mat-header-cell *matHeaderCellDef>Apellido</th>
+        <td mat-cell *matCellDef="let cliente">{{ cliente.apellido }}</td>
+      </ng-container>
+
+      <!-- Dirección -->
+      <ng-container matColumnDef="direccion">
+        <th mat-header-cell *matHeaderCellDef>Dirección</th>
+        <td mat-cell *matCellDef="let cliente">{{ cliente.direccion }}</td>
+      </ng-container>
+
+      <!-- Teléfono -->
+      <ng-container matColumnDef="telefono">
+        <th mat-header-cell *matHeaderCellDef>Teléfono</th>
+        <td mat-cell *matCellDef="let cliente">{{ cliente.telefono }}</td>
+      </ng-container>
+
+      <!-- Correo -->
+      <ng-container matColumnDef="correo">
+        <th mat-header-cell *matHeaderCellDef>Correo</th>
+        <td mat-cell *matCellDef="let cliente">{{ cliente.correo }}</td>
+      </ng-container>
+
+      <!-- Acciones -->
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let cliente">
+          <div class="btn-group btn-group-sm">
+            <button class="btn btn-warning" (click)="editarCliente(cliente)">Editar</button>
+            <button class="btn btn-danger" (click)="this.cliente = cliente; delete()">Eliminar</button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="mostrarColumnas"></tr>
+      <tr mat-row *matRowDef="let row; columns: mostrarColumnas;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons></mat-paginator>
+  </div>
+</div>
