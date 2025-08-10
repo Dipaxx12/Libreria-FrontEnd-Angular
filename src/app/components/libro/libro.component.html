@@ -1,0 +1,134 @@
+<div class="container mt-4">
+  <h2 class="mb-3 text-center">{{ editar ? 'Editar Libro' : 'Registrar Libro' }}</h2>
+
+  <form #formLibro="ngForm" (ngSubmit)="guardar(formLibro)" class="border p-3 rounded shadow-sm">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <input type="text" name="titulo" [(ngModel)]="libro.titulo" placeholder="Título" class="form-control" required>
+      </div>
+      <div class="col-md-2">
+        <input type="number" name="numPaginas" [(ngModel)]="libro.numPaginas" placeholder="Páginas" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <input type="text" name="editorial" [(ngModel)]="libro.editorial" placeholder="Editorial" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <input type="text" name="edicion" [(ngModel)]="libro.edicion" placeholder="Edición" class="form-control">
+      </div>
+
+      <div class="col-md-3">
+        <input type="text" name="idioma" [(ngModel)]="libro.idioma" placeholder="Idioma" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <input type="date" name="fechaPublicacion" [(ngModel)]="libro.fechaPublicacion" placeholder="Fecha de publicación" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <input type="text" name="descripcion" [(ngModel)]="libro.descripcion" placeholder="Descripción" class="form-control">
+      </div>
+
+      <div class="col-md-3">
+        <input type="text" name="tipoPasta" [(ngModel)]="libro.tipoPasta" placeholder="Tipo de pasta" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <input type="text" name="isbn" [(ngModel)]="libro.isbn" placeholder="ISBN" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <input type="number" name="numEjemplares" [(ngModel)]="libro.numEjemplares" placeholder="Ejemplares" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <input type="text" name="portada" [(ngModel)]="libro.portada" placeholder="Portada (URL o nombre)" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <input type="text" name="presentacion" [(ngModel)]="libro.presentacion" placeholder="Presentación" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <input type="number" step="0.01" name="precio" [(ngModel)]="libro.precio" placeholder="Precio" class="form-control">
+      </div>
+
+      <div class="col-md-3">
+        <select name="autor" [(ngModel)]="libro.autor" class="form-select" required>
+          <option [ngValue]="undefined">-- Seleccione Autor --</option>
+          <option *ngFor="let a of autores" [ngValue]="a">
+            {{ a.nombre }} {{ a.apellido }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <select name="categoria" [(ngModel)]="libro.categoria" class="form-select" required>
+          <option [ngValue]="undefined">-- Seleccione Categoría --</option>
+          <option *ngFor="let c of categorias" [ngValue]="c">
+            {{ c.categoria }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-md-12 d-flex gap-2">
+        <button class="btn btn-primary" type="submit">{{ editar ? 'Actualizar' : 'Guardar' }}</button>
+        <button class="btn btn-secondary" type="button" (click)="cancelar(formLibro)">Cancelar</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h3 class="m-0">Listado de Libros</h3>
+      <mat-form-field appearance="outline" class="w-25">
+        <mat-label>Buscar</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Filtra por título, autor, ISBN...">
+      </mat-form-field>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z1 w-100">
+      <ng-container matColumnDef="idLibro">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let l">{{ l.idLibro }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="titulo">
+        <th mat-header-cell *matHeaderCellDef>Título</th>
+        <td mat-cell *matCellDef="let l">{{ l.titulo }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="autor">
+        <th mat-header-cell *matHeaderCellDef>Autor</th>
+        <td mat-cell *matCellDef="let l">
+          {{ l.autor?.nombre }} {{ l.autor?.apellido }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="categoria">
+        <th mat-header-cell *matHeaderCellDef>Categoría</th>
+        <td mat-cell *matCellDef="let l">
+          {{ l.categoria?.categoria }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="precio">
+        <th mat-header-cell *matHeaderCellDef>Precio</th>
+        <td mat-cell *matCellDef="let l">{{ l.precio | currency }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="isbn">
+        <th mat-header-cell *matHeaderCellDef>ISBN</th>
+        <td mat-cell *matCellDef="let l">{{ l.isbn }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let l">
+          <div class="btn-group btn-group-sm">
+            <button class="btn btn-warning" (click)="editarLibro(l)">Editar</button>
+            <button class="btn btn-danger" (click)="delete(l)">Eliminar</button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons></mat-paginator>
+  </div>
+</div>

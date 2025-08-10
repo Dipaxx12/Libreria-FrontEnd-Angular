@@ -18,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { AutorComponent } from './components/autor.component/autor.component';
 import { CategoriaComponent } from './components/categoria.component/categoria.component';
+import { LibroComponent } from './components/libro/libro.component';
 
 
 
@@ -26,7 +27,8 @@ import { CategoriaComponent } from './components/categoria.component/categoria.c
     App,
     ClienteComponent,
     AutorComponent,
-    CategoriaComponent
+    CategoriaComponent,
+    LibroComponent,
   ],
   imports: [
     BrowserModule,
