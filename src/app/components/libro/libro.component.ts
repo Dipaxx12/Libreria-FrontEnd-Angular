@@ -8,10 +8,11 @@ import Swal from 'sweetalert2';
 import { Libro } from '../../model/libro.model';
 import { Autor } from '../../model/autor.model';
 import { Categoria } from '../../model/Categoria';
+import { CartService } from '../../services/cart.service';
 
-import { LibroService } from '../../services/libro';   // 👈 generado por CLI
-import { AutorService } from '../../services/autor';           // 👈 ya existente en tu proyecto
-import { CategoriaService } from '../../services/categoria';   // 👈 ya existente en tu proyecto
+import { LibroService } from '../../services/libro';
+import { AutorService } from '../../services/autor';
+import { CategoriaService } from '../../services/categoria';
 
 @Component({
   standalone: false,
@@ -27,8 +28,9 @@ export class LibroComponent implements OnInit {
 
   libro: Libro = {} as Libro;
 
+  // 👇 añadimos 'carrito' antes de 'acciones'
   displayedColumns: string[] = [
-    'idLibro', 'titulo', 'autor', 'categoria', 'precio', 'isbn', 'acciones'
+    'idLibro', 'titulo', 'autor', 'categoria', 'precio', 'isbn', 'carrito', 'acciones'
   ];
   dataSource = new MatTableDataSource<Libro>([]);
 
@@ -41,10 +43,14 @@ export class LibroComponent implements OnInit {
   constructor(
     private libroService: LibroService,
     private autorService: AutorService,
-    private categoriaService: CategoriaService
+    private categoriaService: CategoriaService,
+    private cartService: CartService,
   ) {}
 
   ngOnInit(): void {
+    // crea/asegura el carrito de invitado (token) una vez
+    this.cartService.ensure().subscribe();
+
     this.findAll();
     this.loadAux();
   }
@@ -90,8 +96,7 @@ export class LibroComponent implements OnInit {
   }
 
   editarLibro(row: Libro): void {
-    // Clonamos el objeto para no tocar la fila directa
-    this.libro = { ...row };
+    this.libro = { ...row }; // clonar
     this.editar = true;
     this.idEditar = row.idLibro ?? null;
   }
@@ -119,5 +124,18 @@ export class LibroComponent implements OnInit {
     form.resetForm();
     this.editar = false;
     this.idEditar = null;
+  }
+
+  // 👇 MÉTODO NUEVO: agregar al carrito
+  addToCart(l: Libro): void {
+    const id = l.idLibro;
+    if (!id) {
+      Swal.fire('Error', 'No se pudo identificar el libro', 'error');
+      return;
+    }
+    this.cartService.addItem(id, 1).subscribe({
+      next: () => Swal.fire('Agregado', 'Libro agregado al carrito', 'success'),
+      error: () => Swal.fire('Error', 'No se pudo agregar al carrito', 'error')
+    });
   }
 }

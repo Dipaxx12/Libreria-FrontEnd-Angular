@@ -19,6 +19,7 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { AutorComponent } from './components/autor.component/autor.component';
 import { CategoriaComponent } from './components/categoria.component/categoria.component';
 import { LibroComponent } from './components/libro/libro.component';
+import { CartPageComponent } from './components/cart-page/cart-page.component';
 
 
 
@@ -29,6 +30,7 @@ import { LibroComponent } from './components/libro/libro.component';
     AutorComponent,
     CategoriaComponent,
     LibroComponent,
+    CartPageComponent
   ],
   imports: [
     BrowserModule,
